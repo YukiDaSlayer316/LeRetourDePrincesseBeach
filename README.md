@@ -1,8 +1,15 @@
-# LeRetourDePrincesseBeach
+# Le Retour De Princesse Beach
 
 Le Retour de Princesse Beach est un jeu de survie inspiré par Space Invaders et Super Mario Bros. 
 Le but du jeu est simple: on incarne la Princesse Beach 
 et on doit éliminer le plus d'ennemis possible afin accumuler des points sans mourir.
+
+# Comment jouer
+
+UP: Voler vers le haut
+DOWN: Voler vers le bas
+LEFT: Voler vers la gauche
+RIGHT: Voler vers la droite
 
 # Création
 
