@@ -117,7 +117,7 @@ public class Jeu extends BasicGame implements Observer{
         }
 
         //FLECHE DROITE
-        if (input.isKeyDown(Input.KEY_RIGHT)) {
+        if (input.isKeyDown(Input.KEY_RIGHT)|| input.isKeyDown(Input.KEY_D)) {
             if (!listeKeys.contains(KeyCode.RIGHT)) {
                 listeKeys.add(KeyCode.RIGHT);
             }
@@ -125,7 +125,7 @@ public class Jeu extends BasicGame implements Observer{
             listeKeys.remove(KeyCode.RIGHT);
 
         }
-        if (input.isKeyDown(Input.KEY_LEFT)) {
+        if (input.isKeyDown(Input.KEY_LEFT)|| input.isKeyDown(Input.KEY_A)) {
             if (!listeKeys.contains(KeyCode.LEFT)) {
                 listeKeys.add(KeyCode.LEFT);
             }
@@ -133,7 +133,7 @@ public class Jeu extends BasicGame implements Observer{
             listeKeys.remove(KeyCode.LEFT);
 
         }
-        if (input.isKeyDown(Input.KEY_UP)) {
+        if (input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
             if (!listeKeys.contains(KeyCode.UP)) {
                 listeKeys.add(KeyCode.UP);
             }
@@ -141,7 +141,7 @@ public class Jeu extends BasicGame implements Observer{
             listeKeys.remove(KeyCode.UP);
 
         }
-        if (input.isKeyDown(Input.KEY_DOWN)) {
+        if (input.isKeyDown(Input.KEY_DOWN)|| input.isKeyDown(Input.KEY_S)) {
             if (!listeKeys.contains(KeyCode.DOWN)) {
                 listeKeys.add(KeyCode.DOWN);
             }
