@@ -41,6 +41,14 @@ private double gravity=5.34;
         listeAnimationSol.add(spriteSheet.getSubImage(5, 0));
 
     }
+     protected boolean peutAttaquer() {
+
+        if (System.currentTimeMillis() - tempsAttaque >= 500) {
+            tempsAttaque = System.currentTimeMillis();
+            return true;
+        }
+        return false;
+    }
     
      void bouger(ArrayList<KeyCode> listeKeys) {
         if (listeKeys.contains(KeyCode.RIGHT)) {
@@ -67,18 +75,10 @@ private double gravity=5.34;
 
         }
         
-        enVol=estEnVol();
-        
-         if (enVol && listeKeys.isEmpty()) {
-            if ((y - cos(hover) > 0) || y - cos(hover) < HAUTEUR_SOL) {
+         if (estEnVol()) {
                 y = (float) (y + cos(hover)*0.15+ gravity*0.08);
-                //+ cos(hover)*0.15
-               // hover += 0.05;
-            }
-
-        }
+          }
      
-
         changerImage();
 
     }
@@ -96,7 +96,7 @@ private double gravity=5.34;
             animation = -1; 
         }
         
-        if(enVol){
+        if(estEnVol()){
           this.image = listeAnimationVol.get(posImage);
         }else{
            this.image = listeAnimationSol.get(posImage);
@@ -106,10 +106,10 @@ private double gravity=5.34;
     }
 
     private boolean estEnVol() {
-          if(y+height==HAUTEUR-HAUTEUR_SOL){
-            return false;
-        }
+          if(y+height<HAUTEUR-HAUTEUR_SOL){
             return true;
+        }
+            return false;
         
     }
 

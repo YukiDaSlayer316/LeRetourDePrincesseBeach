@@ -34,7 +34,10 @@ public class Jeu extends BasicGame implements Observer{
     private Input input; // L’entrée (souris/touches de clavier, etc.)
     private SpriteSheet spriteSheetTiles, spriteSheetDivers, spriteSheetMonde, spriteSheetPrincesse;
 
+    public static final float buffer = 50;
     private Princess princesse;
+    private int vies, points;
+    
     
     /**
      * Contructeur de Jeu
@@ -60,29 +63,11 @@ public class Jeu extends BasicGame implements Observer{
         spriteSheetTiles = new SpriteSheet("images/tiles.png", 32, 32);
         spriteSheetPrincesse = new SpriteSheet("images/sprites_princess.png", 32, 64);
 
-        for (int i = 0; i < LARGEUR; i += 32) {
-            for (int j = 0; j < HAUTEUR; j += 32) {
-                Ciel ciel = new Ciel(i, j, spriteSheetTiles);
-                listeBougeable.add(ciel);
-                listeEntite.add(ciel);
+        initCiel();
+        initPlacher();    
+        initPrincesse();
 
-            }
-        }
-
-        int hauteurPlancher = 2;
-        for (int i = 0; i <= LARGEUR+32; i += 32) {
-            for (int j = 0; j<=hauteurPlancher; j ++) {
-                Plancher plancher = new Plancher(i, HAUTEUR-j*32, spriteSheetTiles);
-                listeBougeable.add(plancher);
-                listeEntite.add(plancher);
-            }
-        }
-        
-        
-
-        princesse = new Princess(64, 64, spriteSheetPrincesse);
-        listeEntite.add(princesse);
-    
+      
     }
 
     @Override
@@ -90,22 +75,46 @@ public class Jeu extends BasicGame implements Observer{
     for (Bougeable bougeable : listeBougeable) {
             bougeable.bouger();
         }
+    
+        deplacerBackground();
+        enleverEntitesExterieurEcran();
+        
         getKeys();
         traiterKeys();
-        gererCollision();
-        deplacerBackground();
     
+            gererCollisionJoueurEnnemi();
+            gererCollisionBulletEnnemi();
+            gererCollisionJoueurBonus();
     }
 
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
-    for (Entite entite : listeEntite) {
+     for (Entite entite : listeEntite) {
             g.drawImage(entite.getImage(), entite.getX(), entite.getY());
         }
+
+        g.drawString("Points: " + points, LARGEUR - buffer * 5, 10);
+
+//        int posXCoeur = 16, posYCoeur = 32;
+//        for (int i = 0; i < nbVies; i++) {
+//            g.drawImage(spriteSheetCoeur, posXCoeur, posYCoeur);
+//            posXCoeur += 32;
+//        }
+
+//        if (finDePartie) {
+//            g.drawString("GAME OVER", LONGUEUR / 2 - 10, HAUTEUR / 2);
+//
+//        }
     }
 
     @Override
-    public void update(Observable o, Object o1) {
+    public void update(Observable o, Object arg) {
+        //finDePartie = modele.isFinDePartie();
+        if (modele.isFinDePartie()) {
+           // tempsCompteARebours = System.currentTimeMillis() + 2500;
+        }
+        vies = modele.getHealthPoints();
+        points = modele.getPoints();
     }
      private void getKeys() {
         if (input.isKeyDown(Input.KEY_SPACE)) {
@@ -151,19 +160,40 @@ public class Jeu extends BasicGame implements Observer{
         }
     }
 
-    private void traiterKeys() {
-        princesse.bouger(listeKeys); // Bouger le joueur tiendra compte de la liste
-
-        if (listeKeys.contains(KeyCode.SPACE)) {
-            tirerBalle(); // Méthode qui va ajouter un projectile tiré à l’écran
+    private void traiterKeys() throws SlickException {
+        princesse.bouger(listeKeys); 
+        if (listeKeys.contains(KeyCode.SPACE)&& princesse.peutAttaquer()) {
+            tirerBalle(); 
         }
 
     }
+    
 
-    private void gererCollision() {
+   public boolean isBonusTriple() {
+//        if (tempsBonusTriple + 10000 < System.currentTimeMillis()) {
+//            return false;
+//        }
+        return true;
     }
 
-    private void tirerBalle() {
+    private void tirerBalle() throws SlickException {
+        if (!isBonusTriple()) {
+            Bullet bullet = new Bullet(princesse.getX() + princesse.getWidth(), princesse.getY() + (princesse.getHeight() / 4));
+            listeBougeable.add(bullet);
+            listeEntite.add(bullet);
+        } else {
+            Bullet bullet = new Bullet(princesse.getX() + princesse.getWidth(), princesse.getY() + (princesse.getHeight() / 4));
+            listeBougeable.add(bullet);
+            listeEntite.add(bullet);
+            Bullet bullet1 = new Bullet(princesse.getX() + princesse.getWidth(), princesse.getY() + (princesse.getHeight() / 4));
+            bullet.setDeltaY(12);
+            listeBougeable.add(bullet1);
+            listeEntite.add(bullet1);
+            Bullet bullet2 = new Bullet(princesse.getX() + princesse.getWidth(), princesse.getY() + (princesse.getHeight() / 4));
+            bullet2.setDeltaY(-12);
+            listeBougeable.add(bullet2);
+            listeEntite.add(bullet2);
+        }
     }
 
     private void deplacerBackground() {
@@ -177,4 +207,150 @@ public class Jeu extends BasicGame implements Observer{
         }
 
     }
+
+    private void initPrincesse() {
+     princesse = new Princess(64, 64, spriteSheetPrincesse);
+        listeEntite.add(princesse);
+    
+    }
+
+    private void initPlacher() {
+       int hauteurPlancher = 2;
+        for (int i = 0; i <= LARGEUR+32; i += 32) {
+            for (int j = 0; j<=hauteurPlancher; j ++) {
+                Plancher plancher = new Plancher(i, HAUTEUR-j*32, spriteSheetTiles);
+                listeBougeable.add(plancher);
+                listeEntite.add(plancher);
+            }
+        }
+    }
+
+    private void initCiel() {
+          for (int i = 0; i < LARGEUR; i += 32) {
+            for (int j = 0; j < HAUTEUR; j += 32) {
+                Ciel ciel = new Ciel(i, j, spriteSheetTiles);
+                listeBougeable.add(ciel);
+                listeEntite.add(ciel);
+
+            }
+        }
+    }
+    
+      private void gererCollisionBulletEnnemi() throws SlickException {
+        ArrayList<Entite> listeTemp = new ArrayList();
+        for (Bougeable b1 : listeBougeable) {
+
+            for (Bougeable b2 : listeBougeable) {
+                if ((b1 instanceof Ennemi && b2 instanceof Bullet)) {
+
+                    if (b1.getRectangle().intersects(b2.getRectangle())) {
+
+                        listeTemp.add((Entite) b1);
+                        listeTemp.add((Entite) b2);
+
+                        controleur.elimineEnnemis();
+                    }
+                }
+            }
+        }
+
+//        if (!listeTemp.isEmpty()) {
+//            int r = random.nextInt(10);
+//            if (r == 1) {
+//                spondBonus(listeTemp.get(0).getRectangle().getX(), listeTemp.get(0).getRectangle().getY());
+//            }
+//        }
+
+        listeEntite.removeAll(listeTemp);
+        listeBougeable.removeAll(listeTemp);
+    }
+      
+       private void gererCollisionJoueurEnnemi() {
+        ArrayList<Entite> listeTemp = new ArrayList();
+
+        for (Bougeable bougeable : listeBougeable) {
+            if (bougeable instanceof Ennemi || bougeable instanceof BulletEnnemi) {
+                if (princesse.getRectangle().intersects(bougeable.getRectangle())) {
+                    listeTemp.add((Entite) bougeable);
+                    controleur.perdVie();
+                }
+            }
+        }
+
+        listeEntite.removeAll(listeTemp);
+        listeBougeable.removeAll(listeTemp);
+
+    }
+
+       
+       
+    private void gererCollisionJoueurBonus() {
+        ArrayList<Entite> listeTemp = new ArrayList();
+        Bonus bonus = null;
+
+        for (Bougeable bougeable : listeBougeable) {
+            if (bougeable instanceof Bonus) {
+                if (princesse.getRectangle().intersects(bougeable.getRectangle())) {
+                    listeTemp.add((Entite) bougeable);
+
+                    controleur.ramasseBonus();
+                    bonus = (Bonus) bougeable;
+
+                }
+            }
+        }
+
+        if (!listeTemp.isEmpty()) {
+            activerPouvoirBonus(bonus);
+
+        }
+
+        listeBougeable.removeAll(listeTemp);
+        listeEntite.removeAll(listeTemp);
+
+    }
+
+       private void enleverEntitesExterieurEcran() {
+        ArrayList<Entite> listeTemp = new ArrayList();
+
+        for (Entite entite : listeEntite) {
+            if (entite.getDetruire()) {
+                listeTemp.add(entite);
+            }
+        }
+        listeEntite.removeAll(listeTemp);
+        listeBougeable.remove(listeTemp);
+    }
+       
+   
+       
+          private void activerPouvoirBonus(Bonus bonus) {
+        ArrayList<Entite> listeTemp = new ArrayList();
+//
+//        if (bonus instanceof BombeMega) {
+//            for (Bougeable bougeable : listeBougeable) {
+//                if (bougeable instanceof Ennemi && ((Entite) bougeable).getX() < LONGUEUR) {
+//                    listeTemp.add((Entite) bougeable);
+//                }
+//            }
+//            Pow pow = new Pow(LONGUEUR / 2, HAUTEUR / 2, spriteSheetMonde);
+//            listeEntite.add(pow);
+//            listeBougeable.add(pow);
+//
+//            int nbEnnemisTues = listeTemp.size();
+//            controleur.ramasseBombeMega(nbEnnemisTues);
+//
+//            listeEntite.removeAll(listeTemp);
+//            listeBougeable.removeAll(listeTemp);
+//        }
+//        if (bonus instanceof BoostEnergie) {
+//            controleur.ramasseBoostEnergie();
+//        }
+//        if (bonus instanceof ArmeABalles) {
+//            tempsBonusTriple = System.currentTimeMillis();
+//
+//        }
+
+    }
+
 }
