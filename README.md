@@ -10,7 +10,7 @@ Le jeu est construit sur Java à partir de la librairie "slick2D" et à partir d
 
 Liens pour les Spritesheets:
 
-# Depedencies et librairies à importer
+# Librairies à importer
 
 1. Télécharger le fichier «slick2Dlib.zip» : http://slick.ninjacave.com/wiki/index.php?title=Setting_up_Slick2D_with_NetBeansIDE
 2. Décompresser le fichier et noter le chemin du dossier.
