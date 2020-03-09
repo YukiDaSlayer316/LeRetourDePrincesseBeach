@@ -10,6 +10,7 @@ UP: Voler vers le haut
 DOWN: Voler vers le bas
 LEFT: Voler vers la gauche
 RIGHT: Voler vers la droite
+SPACE : Attaquer
 
 # Création
 
