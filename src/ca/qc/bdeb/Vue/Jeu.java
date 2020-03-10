@@ -89,8 +89,7 @@ public class Jeu extends BasicGame implements Observer {
         for (Bougeable bougeable : listeBougeable) {
             bougeable.bouger();
         }
-            deplacerBackground();
-
+        deplacerBackground();
         enleverEntitesExterieurEcran();
 
         if (!isFinDePartie) {
@@ -101,6 +100,12 @@ public class Jeu extends BasicGame implements Observer {
             gererCollisionJoueurEnnemi();
             gererCollisionBulletEnnemi();
             gererCollisionJoueurBonus();
+        }
+
+        if (isFinDePartie) {
+            if (input.isKeyDown(Input.KEY_R)) {
+                restartGame();
+            }
         }
 
     }
@@ -121,8 +126,8 @@ public class Jeu extends BasicGame implements Observer {
 
         if (isFinDePartie) {
             princesse.falling();
-            stopBackgroundFromMoving();
-            g.drawString("GAME OVER", LARGEUR / 2 - 10, HAUTEUR / 2);
+            //stopBackgroundFromMoving();
+            g.drawString("GAME OVER. PRESS R TO RESTART", (LARGEUR / 2) - buffer, HAUTEUR / 2);
         }
     }
 
@@ -132,6 +137,7 @@ public class Jeu extends BasicGame implements Observer {
         if (isFinDePartie) {
             // tempsCompteARebours = System.currentTimeMillis() + 2500;
             //clearCollisionableList();
+            stopBackgroundFromMoving();
             //beach doit crash
             //game over pour 2 sec+ freeze app
             // restartGame();
@@ -430,13 +436,26 @@ public class Jeu extends BasicGame implements Observer {
 
     private void restartGame() {
         modele.restartPartie();
+//        makeBackgroundMoveAgain();
+        clearCollisionableList();
+        princesse.setLocation(64, HAUTEUR - HAUTEUR_SOL - princesse.getHeight());
+
     }
 
-    private void makeBackgroundMoveAgain(){
-        
+    private void makeBackgroundMoveAgain() {
+
     }
-    
+
     private void stopBackgroundFromMoving() {
+
+        //todo
+        ArrayList<Entite> listeTemp = new ArrayList();
+
+        for (Bougeable bougeable : listeBougeable) {
+            if (bougeable instanceof Background) {
+                listeTemp.add((Entite) bougeable);
+            }
+        }
 
     }
 

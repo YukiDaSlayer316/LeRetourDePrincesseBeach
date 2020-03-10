@@ -19,4 +19,8 @@ public class Ciel extends Background{
      public Ciel(float x, float y, SpriteSheet spriteSheet) {
         super(x, y, spriteSheet,6 , 12);
     }
+
+    @Override
+    public void isMoving() {
+    }
 }

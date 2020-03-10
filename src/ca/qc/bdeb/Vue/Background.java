@@ -11,10 +11,14 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author emuli
  */
-public abstract class Background extends Entite implements Bougeable{
+public abstract class Background extends Entite implements Bougeable {
 
     public Background(float x, float y, SpriteSheet spriteSheet, int ligne, int colonne) {
         super(x, y, spriteSheet, ligne, colonne);
     }
 
+    public void isNotMoving() {
+        deltaX = 0;
+    }
+    public abstract void isMoving();
 }
