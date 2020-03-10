@@ -41,12 +41,13 @@ public class Jeu extends BasicGame implements Observer {
     private ArrayList<KeyCode> listeKeys = new ArrayList<>(); // Les touches enfoncées
     private Input input; // L’entrée (souris/touches de clavier, etc.)
     private SpriteSheet spriteSheetTiles, spriteSheetDivers,
-            spriteSheetCoeur, spriteSheetMonde, spriteSheetPrincesse;
+            spriteSheetCoeur, spriteSheetMonde, spriteSheetPrincesse,
+            spriteSheetBonus;
 
     public static final float buffer = 50;
     private Princess princesse;
     private boolean isFinDePartie = false;
-    private int vies, points, decallage, intervaleHauteur;
+    private int vies, points, decallage, intervaleHauteur, indexBackGround;
     private Random random = new Random();
 
     /**
@@ -68,19 +69,25 @@ public class Jeu extends BasicGame implements Observer {
     public void init(GameContainer container) throws SlickException {
         input = container.getInput();
 
+        spriteSheetBonus = new SpriteSheet("images/sprites_divers.png", 32, 32);
         spriteSheetDivers = new SpriteSheet("images/sprites_divers.png", 32, 32);
         spriteSheetMonde = new SpriteSheet("images/sprites_monde.png", 32, 32);
-        spriteSheetTiles = new SpriteSheet("images/tiles.png", 32, 32);
+        spriteSheetTiles = new SpriteSheet("/images/tiles.png", 32, 32);
         spriteSheetPrincesse = new SpriteSheet("images/sprites_princess.png", 32, 64);
         spriteSheetCoeur = new SpriteSheet("/images/coeur.png", 32, 32);
 
         vies = modele.getHealthPoints();
         waveTimer.start();
         decallage = HAUTEUR - HAUTEUR_SOL;
+        indexBackGround = listeEntite.size();
 
         initCiel();
         initPlancher();
         initPrincesse();
+
+        Bonus bonus = new BonusVie(136, 136, spriteSheetDivers);
+        listeEntite.add(bonus);
+        listeBougeable.add(bonus);
 
         intervaleHauteur = (int) (HAUTEUR - HAUTEUR_SOL - princesse.getHeight());
 
@@ -310,14 +317,43 @@ public class Jeu extends BasicGame implements Observer {
             }
         }
 
-//        if (!listeTemp.isEmpty()) {
-//            int r = random.nextInt(10);
-//            if (r == 1) {
-//                spondBonus(listeTemp.get(0).getRectangle().getX(), listeTemp.get(0).getRectangle().getY());
-//            }
-//        }
+        if (!listeTemp.isEmpty()) {
+            int r = random.nextInt(10);
+            if (r == 1) {
+                spondBonus(256, 256);
+
+                //spondBonus(listeTemp.get(0).getRectangle().getX(), listeTemp.get(0).getRectangle().getY());
+                System.out.println("Bonus empty : " + listeTemp.isEmpty());
+            }
+        }
         listeEntite.removeAll(listeTemp);
         listeBougeable.removeAll(listeTemp);
+    }
+
+    private void spondBonus(float x, float y) throws SlickException {
+        int choixBonus = random.nextInt(3);
+        //  int choixBonus = 0;
+
+        Bonus bonus = null;
+        switch (choixBonus) {
+            case 0:
+
+                System.out.println("x:" + x);
+                System.out.println("y:" + y);
+                bonus = new BonusVie(x, y, spriteSheetDivers);
+                break;
+            case 1:
+//                bonus = new BombeMega(x, y, spriteSheetBonus);
+
+                break;
+            case 2:
+//                bonus = new ArmeABalles(x, y, spriteSheetBonus);
+                break;
+            default:
+        }
+
+        listeEntite.add(indexBackGround, bonus);
+        listeBougeable.add((Bougeable) bonus);
     }
 
     private void gererCollisionJoueurEnnemi() {
@@ -354,8 +390,7 @@ public class Jeu extends BasicGame implements Observer {
         }
 
         if (!listeTemp.isEmpty()) {
-            activerPouvoirBonus(bonus);
-
+            activerBonus(bonus);
         }
 
         listeBougeable.removeAll(listeTemp);
@@ -375,38 +410,24 @@ public class Jeu extends BasicGame implements Observer {
         listeBougeable.remove(listeTemp);
     }
 
-    private void activerPouvoirBonus(Bonus bonus) {
-        ArrayList<Entite> listeTemp = new ArrayList();
-//
-//        if (bonus instanceof BombeMega) {
-//            for (Bougeable bougeable : listeBougeable) {
-//                if (bougeable instanceof Ennemi && ((Entite) bougeable).getX() < LONGUEUR) {
-//                    listeTemp.add((Entite) bougeable);
-//                }
-//            }
-//            Pow pow = new Pow(LONGUEUR / 2, HAUTEUR / 2, spriteSheetMonde);
-//            listeEntite.add(pow);
-//            listeBougeable.add(pow);
-//
-//            int nbEnnemisTues = listeTemp.size();
-//            controleur.ramasseBombeMega(nbEnnemisTues);
-//
-//            listeEntite.removeAll(listeTemp);
-//            listeBougeable.removeAll(listeTemp);
-//        }
-//        if (bonus instanceof BoostEnergie) {
-//            controleur.ramasseBoostEnergie();
-//        }
+    private void activerBonus(Bonus bonus) {
+
+        if (bonus instanceof BombeMega) {
+            activerBonusBombe(bonus);
+        }
+        if (bonus instanceof BonusVie) {
+            controleur.ramasseBonusVie();
+        }
 //        if (bonus instanceof ArmeABalles) {
-//            tempsBonusTriple = System.currentTimeMillis();
+//            //tempsBonusTriple = System.currentTimeMillis();
 //
 //        }
 
     }
 
     private void declencherWaveEnnemis() throws SlickException {
-        // int choixTypeEnnemi = random.nextInt(7);
-        int choixTypeEnnemi = 1;
+        int choixTypeEnnemi = random.nextInt(2);
+//        int choixTypeEnnemi = 1;
 
         switch (choixTypeEnnemi) {
             case 0:
@@ -467,6 +488,22 @@ public class Jeu extends BasicGame implements Observer {
             }
         }
 
+    }
+
+    private void activerBonusBombe(Bonus bonus) {
+        ArrayList<Entite> listeTemp = new ArrayList();
+
+        for (Bougeable bougeable : listeBougeable) {
+            if (bougeable instanceof Ennemi && ((Entite) bougeable).getX() < LARGEUR) {
+                listeTemp.add((Entite) bougeable);
+            }
+        }
+
+        int nbEnnemisTues = listeTemp.size();
+        controleur.ramasseBombeMega(nbEnnemisTues);
+
+        listeEntite.removeAll(listeTemp);
+        listeBougeable.removeAll(listeTemp);
     }
 
 }

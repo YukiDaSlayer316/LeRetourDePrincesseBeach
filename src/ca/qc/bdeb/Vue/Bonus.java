@@ -34,9 +34,9 @@ public abstract class Bonus extends Entite implements Bougeable,Collisionable{
     @Override
     public void bouger() {
         x=x-deltaX;        
-     if( x<-buffer){
-         this.setDetruire(true);
-     }
+//     if( x<-buffer){
+//         this.setDetruire(true);
+//     }
     }
 
 

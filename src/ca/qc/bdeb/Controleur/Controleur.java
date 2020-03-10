@@ -49,7 +49,7 @@ public class Controleur {
         modele.ajouterPoints(PTS_BONUS);
     }
 
-    public void ramasseBoostEnergie() {
+    public void ramasseBonusVie() {
         modele.ajouterHealthPoints();
     }
 

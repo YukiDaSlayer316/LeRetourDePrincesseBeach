@@ -17,7 +17,7 @@ public class Modele extends Observable {
     private Random rand = new Random();
     private boolean finDePartie = false;
 
-    public static int PTS_ENNEMIS = 5, PTS_BONUS = 25,
+    public static int PTS_ENNEMIS = 10, PTS_BONUS = 5,
             MAX_HEALTH = 3;
 
     private int healthPoints = MAX_HEALTH, points = 0;
