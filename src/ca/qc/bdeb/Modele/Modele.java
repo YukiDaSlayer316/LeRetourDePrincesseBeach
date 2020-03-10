@@ -12,15 +12,17 @@ import java.util.Random;
  *
  * @author emuli
  */
-public class Modele extends Observable{
-     private Random rand = new Random();
-    private int  healthPoints, points = 0;
+public class Modele extends Observable {
+
+    private Random rand = new Random();
     private boolean finDePartie = false;
-    
-     public static int PTS_ENNEMIS = 5, PTS_BONUS = 25,
-             MAX_HEALTH = 3;
-   
-     public int getHealthPoints() {
+
+    public static int PTS_ENNEMIS = 5, PTS_BONUS = 25,
+            MAX_HEALTH = 3;
+
+    private int healthPoints = MAX_HEALTH, points = 0;
+
+    public int getHealthPoints() {
         return healthPoints;
     }
 
@@ -28,6 +30,7 @@ public class Modele extends Observable{
         this.healthPoints -= 1;
         if (healthPoints < 1) {
             finDePartie = true;
+            //restartPartie();
         }
         majObservers();
     }
@@ -40,13 +43,14 @@ public class Modele extends Observable{
     public int getPoints() {
         return points;
     }
+
     public boolean isFinDePartie() {
         return finDePartie;
     }
 
     public void resetPoints() {
         points = 0;
-majObservers();
+        majObservers();
     }
 
     public void ajouterHealthPoints() {
@@ -55,16 +59,21 @@ majObservers();
         }
         majObservers();
     }
-   public void resetHealthPoints() {
+
+    public void resetHealthPoints() {
         healthPoints = MAX_HEALTH;
         majObservers();
     }
-   
-    public void resetPartie() {
-        this.finDePartie = false;
+
+    public void restartPartie() {
+        finDePartie = false;
+        healthPoints = MAX_HEALTH;
+        points = 0;
+
         majObservers();
     }
-      public void majObservers() {
+
+    public void majObservers() {
         setChanged();
         notifyObservers();
     }

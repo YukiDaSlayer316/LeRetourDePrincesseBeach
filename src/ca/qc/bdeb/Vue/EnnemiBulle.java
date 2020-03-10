@@ -17,7 +17,7 @@ import org.newdawn.slick.SpriteSheet;
 public class EnnemiBulle extends Ennemi {
 
     private ArrayList<Image> listeAnimation = new ArrayList<>();
-    private float deltaY=(float) 0.003;
+    private float deltaY=(float) 0.03;
     private Random r = new Random();
 
     /**

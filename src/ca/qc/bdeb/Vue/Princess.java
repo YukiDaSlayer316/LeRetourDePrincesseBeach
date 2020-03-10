@@ -19,18 +19,18 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author emuli
  */
-public class Princess extends Entite{
-    
-     private float deltaX = 1.6f, deltaY = 1.6f, hover = 0.0f;
+public class Princess extends Entite {
+
+    private float deltaX = 3.4f, deltaY = 3.4f, hover = 0.0f;
     private ArrayList<Image> listeAnimationVol = new ArrayList<>();
-        private ArrayList<Image> listeAnimationSol = new ArrayList<>();
-private double gravity=5.34;
-        
-    private int animation = 0, posImage=0;
-    private boolean enVol=false;
-    
+    private ArrayList<Image> listeAnimationSol = new ArrayList<>();
+    private double gravity = 5.34;
+
+    private int animation = 0, posImage = 0;
+    private boolean enVol = false;
+
     private long tempsAttaque = 0;
-    
+
     public Princess(float x, float y, SpriteSheet spriteSheet) {
         super(x, y, spriteSheet, 0, 2);
         listeAnimationVol.add(spriteSheet.getSubImage(0, 0));
@@ -41,7 +41,8 @@ private double gravity=5.34;
         listeAnimationSol.add(spriteSheet.getSubImage(5, 0));
 
     }
-     protected boolean peutAttaquer() {
+
+    protected boolean peutAttaquer() {
 
         if (System.currentTimeMillis() - tempsAttaque >= 500) {
             tempsAttaque = System.currentTimeMillis();
@@ -49,8 +50,8 @@ private double gravity=5.34;
         }
         return false;
     }
-    
-     void bouger(ArrayList<KeyCode> listeKeys) {
+
+    void bouger(ArrayList<KeyCode> listeKeys) {
         if (listeKeys.contains(KeyCode.RIGHT)) {
             if (x + deltaX + width < LARGEUR) {
                 x = x + deltaX;
@@ -69,48 +70,53 @@ private double gravity=5.34;
 
         }
         if (listeKeys.contains(KeyCode.DOWN)) {
-            if (y + deltaY  < HAUTEUR - HAUTEUR_SOL-height) {
+            if (y + deltaY < HAUTEUR - HAUTEUR_SOL - height) {
                 y = y + deltaY;  //x = x - deltaX;
             }
 
         }
-        
-         if (estEnVol()) {
-                y = (float) (y + cos(hover)*0.15+ gravity*0.08);
-          }
-     
+
+        if (estEnVol()) {
+            y = (float) (y + cos(hover) * 0.15 + gravity * 0.2);
+        }
+
         changerImage();
 
     }
 
     private void changerImage() {
-        
+
         if (animation == 0) {
-            posImage=0;
+            posImage = 0;
         } else if (animation == 50) {
-                       posImage=1;
+            posImage = 1;
         } else if (animation == 100) {
-                       posImage=2;
-        } 
-        else if (animation == 150) {
-            animation = -1; 
+            posImage = 2;
+        } else if (animation == 150) {
+            animation = -1;
         }
-        
-        if(estEnVol()){
-          this.image = listeAnimationVol.get(posImage);
-        }else{
-           this.image = listeAnimationSol.get(posImage);
+
+        if (estEnVol()) {
+            this.image = listeAnimationVol.get(posImage);
+        } else {
+            this.image = listeAnimationSol.get(posImage);
         }
         animation++;
 
     }
 
     private boolean estEnVol() {
-          if(y+height<HAUTEUR-HAUTEUR_SOL){
+        if (y + height < HAUTEUR - HAUTEUR_SOL) {
             return true;
         }
-            return false;
-        
+        return false;
+
+    }
+
+    protected void falling() {
+        if (y+height<HAUTEUR-HAUTEUR_SOL) {
+            y=(float) (y+gravity);
+        }
     }
 
 }

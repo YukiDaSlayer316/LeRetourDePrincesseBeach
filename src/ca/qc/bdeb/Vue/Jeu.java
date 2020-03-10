@@ -40,10 +40,12 @@ public class Jeu extends BasicGame implements Observer {
     private CopyOnWriteArrayList<Entite> listeEntite = new CopyOnWriteArrayList<>();
     private ArrayList<KeyCode> listeKeys = new ArrayList<>(); // Les touches enfoncées
     private Input input; // L’entrée (souris/touches de clavier, etc.)
-    private SpriteSheet spriteSheetTiles, spriteSheetDivers, spriteSheetMonde, spriteSheetPrincesse;
+    private SpriteSheet spriteSheetTiles, spriteSheetDivers,
+            spriteSheetCoeur, spriteSheetMonde, spriteSheetPrincesse;
 
     public static final float buffer = 50;
     private Princess princesse;
+    private boolean isFinDePartie = false;
     private int vies, points, decallage;
     private Random random = new Random();
 
@@ -70,12 +72,14 @@ public class Jeu extends BasicGame implements Observer {
         spriteSheetMonde = new SpriteSheet("images/sprites_monde.png", 32, 32);
         spriteSheetTiles = new SpriteSheet("images/tiles.png", 32, 32);
         spriteSheetPrincesse = new SpriteSheet("images/sprites_princess.png", 32, 64);
+        spriteSheetCoeur = new SpriteSheet("/images/coeur.png", 32, 32);
 
+        vies = modele.getHealthPoints();
         waveTimer.start();
-        decallage=HAUTEUR-HAUTEUR_SOL;
+        decallage = HAUTEUR - HAUTEUR_SOL;
 
         initCiel();
-        initPlacher();
+        initPlancher();
         initPrincesse();
 
     }
@@ -85,16 +89,20 @@ public class Jeu extends BasicGame implements Observer {
         for (Bougeable bougeable : listeBougeable) {
             bougeable.bouger();
         }
+            deplacerBackground();
 
-        deplacerBackground();
         enleverEntitesExterieurEcran();
 
-        getKeys();
-        traiterKeys();
+        if (!isFinDePartie) {
 
-        gererCollisionJoueurEnnemi();
-        gererCollisionBulletEnnemi();
-        gererCollisionJoueurBonus();
+            getKeys();
+            traiterKeys();
+
+            gererCollisionJoueurEnnemi();
+            gererCollisionBulletEnnemi();
+            gererCollisionJoueurBonus();
+        }
+
     }
 
     @Override
@@ -105,25 +113,43 @@ public class Jeu extends BasicGame implements Observer {
 
         g.drawString("Points: " + points, LARGEUR - buffer * 5, 10);
 
-//        int posXCoeur = 16, posYCoeur = 32;
-//        for (int i = 0; i < nbVies; i++) {
-//            g.drawImage(spriteSheetCoeur, posXCoeur, posYCoeur);
-//            posXCoeur += 32;
-//        }
-//        if (finDePartie) {
-//            g.drawString("GAME OVER", LONGUEUR / 2 - 10, HAUTEUR / 2);
-//
-//        }
+        int posXCoeur = 16, posYCoeur = 32;
+        for (int i = 0; i < vies; i++) {
+            g.drawImage(spriteSheetCoeur, posXCoeur, posYCoeur);
+            posXCoeur += 32;
+        }
+
+        if (isFinDePartie) {
+            princesse.falling();
+            stopBackgroundFromMoving();
+            g.drawString("GAME OVER", LARGEUR / 2 - 10, HAUTEUR / 2);
+        }
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        //finDePartie = modele.isFinDePartie();
-        if (modele.isFinDePartie()) {
+        isFinDePartie = modele.isFinDePartie();
+        if (isFinDePartie) {
             // tempsCompteARebours = System.currentTimeMillis() + 2500;
+            //clearCollisionableList();
+            //beach doit crash
+            //game over pour 2 sec+ freeze app
+            // restartGame();
+
         }
         vies = modele.getHealthPoints();
         points = modele.getPoints();
+    }
+
+    private void clearCollisionableList() {
+        ArrayList<Entite> listeTemp = new ArrayList();
+        for (Entite entite : listeEntite) {
+            if (entite instanceof Collisionable) {
+                listeTemp.add(entite);
+            }
+        }
+        listeEntite.removeAll(listeTemp);
+        listeBougeable.removeAll(listeTemp);
     }
 
     private void getKeys() {
@@ -182,8 +208,9 @@ public class Jeu extends BasicGame implements Observer {
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
+                //  if (!isFinDePartie) {
                 declencherWaveEnnemis();
-                System.out.println("1");
+                // }
             } catch (Exception ex) {
                 Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -235,7 +262,7 @@ public class Jeu extends BasicGame implements Observer {
 
     }
 
-    private void initPlacher() {
+    private void initPlancher() {
         int hauteurPlancher = 2;
         for (int i = 0; i <= LARGEUR + 32; i += 32) {
             for (int j = 0; j <= hauteurPlancher; j++) {
@@ -394,11 +421,23 @@ public class Jeu extends BasicGame implements Observer {
 
     private void creerEnnemisBulles() {
         for (int i = 0; i < getNumberEnnemisSpawned(); i++) {
-            EnnemiBulle ennemiBulle = new EnnemiBulle(LARGEUR ,
-                    decallage-buffer+i*16  , spriteSheetDivers);
+            EnnemiBulle ennemiBulle = new EnnemiBulle(LARGEUR,
+                    decallage - buffer + i * 16, spriteSheetDivers);
             listeEntite.add(ennemiBulle);
             listeBougeable.add(ennemiBulle);
         }
+    }
+
+    private void restartGame() {
+        modele.restartPartie();
+    }
+
+    private void makeBackgroundMoveAgain(){
+        
+    }
+    
+    private void stopBackgroundFromMoving() {
+
     }
 
 }

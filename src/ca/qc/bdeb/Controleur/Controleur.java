@@ -28,8 +28,8 @@ public class Controleur {
             AppGameContainer app;
             app = new AppGameContainer(new Jeu("Jeu", this, modele));
             app.setDisplayMode(LARGEUR, HAUTEUR, false);
-            app.setShowFPS(false);
-            app.setVSync(false);
+            app.setShowFPS(true);
+            app.setVSync(true);
             app.start();
         } catch (SlickException e) {
             e.printStackTrace();
@@ -64,6 +64,6 @@ public class Controleur {
     public void finDePartie() {
         modele.resetHealthPoints();
         modele.resetPoints();
-        modele.resetPartie();
+        modele.restartPartie();
     }
 }
