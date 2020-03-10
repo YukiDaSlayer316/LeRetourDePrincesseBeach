@@ -14,7 +14,7 @@ import org.newdawn.slick.SpriteSheet;
  */
 public abstract class Ennemi extends Entite implements Bougeable, Collisionable{
 
-    protected float deltaX = 2.8f,deltaY = 0.3f;
+    protected float deltaX = 1.4f,deltaY = 0.3f;
     protected int tempsAnimation=0;
     
        /**
