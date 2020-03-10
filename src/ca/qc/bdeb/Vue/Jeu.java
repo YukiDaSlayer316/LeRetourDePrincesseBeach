@@ -46,7 +46,7 @@ public class Jeu extends BasicGame implements Observer {
     public static final float buffer = 50;
     private Princess princesse;
     private boolean isFinDePartie = false;
-    private int vies, points, decallage;
+    private int vies, points, decallage, intervaleHauteur;
     private Random random = new Random();
 
     /**
@@ -81,6 +81,8 @@ public class Jeu extends BasicGame implements Observer {
         initCiel();
         initPlancher();
         initPrincesse();
+
+        intervaleHauteur = (int) (HAUTEUR - HAUTEUR_SOL - princesse.getHeight());
 
     }
 
@@ -404,13 +406,14 @@ public class Jeu extends BasicGame implements Observer {
 
     private void declencherWaveEnnemis() throws SlickException {
         // int choixTypeEnnemi = random.nextInt(7);
-        int choixTypeEnnemi = 0;
+        int choixTypeEnnemi = 1;
 
         switch (choixTypeEnnemi) {
             case 0:
                 creerEnnemisBulles();
                 break;
-
+            case 1:
+                creerEnnemiRocket();
             default:
 
         }
@@ -432,6 +435,13 @@ public class Jeu extends BasicGame implements Observer {
             listeEntite.add(ennemiBulle);
             listeBougeable.add(ennemiBulle);
         }
+    }
+
+    private void creerEnnemiRocket() {
+        int hauteur = random.nextInt(intervaleHauteur);
+        EnnemiRocket ennemiRocket = new EnnemiRocket(LARGEUR, hauteur, spriteSheetDivers);
+        listeEntite.add(ennemiRocket);
+        listeBougeable.add(ennemiRocket);
     }
 
     private void restartGame() {

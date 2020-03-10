@@ -14,10 +14,10 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author 1749637
  */
-public class EnnemiBulle extends Ennemi {
+public class EnnemiRocket extends Ennemi {
 
     private ArrayList<Image> listeAnimation = new ArrayList<>();
-    private float deltaY;
+    private float deltaX=20;
     private Random r = new Random();
 
     /**
@@ -25,27 +25,22 @@ public class EnnemiBulle extends Ennemi {
      * @param y position en y
      * @param spriteSheet spriteSheet ou se trouve son image   
      */
-    public EnnemiBulle(float x, float y, SpriteSheet spriteSheet) {
+    public EnnemiRocket(float x, float y, SpriteSheet spriteSheet) {
         super(x, y, spriteSheet, 0, 0);
-        listeAnimation.add(spriteSheet.getSubImage(0, 0));
-        listeAnimation.add(spriteSheet.getSubImage(1, 0));
-        listeAnimation.add(spriteSheet.getSubImage(2, 0));
-        listeAnimation.add(spriteSheet.getSubImage(3, 0));
-        listeAnimation.add(spriteSheet.getSubImage(4, 0));
-        listeAnimation.add(spriteSheet.getSubImage(5, 0));
-        listeAnimation.add(spriteSheet.getSubImage(6, 0));
-        listeAnimation.add(spriteSheet.getSubImage(7, 0));
-        deltaY = (float) r.nextDouble();
+        listeAnimation.add(spriteSheet.getSubImage(3, 1));
+        listeAnimation.add(spriteSheet.getSubImage(4, 1));
+        listeAnimation.add(spriteSheet.getSubImage(5, 1));
+        listeAnimation.add(spriteSheet.getSubImage(6, 1));
+//        deltaY = (float) r.nextDouble();
     }
 
     @Override
     public void bouger() {
         super.bouger();
-        y -= deltaY;
         x -= deltaX;
-        if (y + width < 0) {
-            setDetruire(true);
-        }
+//        if (y + width < 0) {
+//            setDetruire(true);
+//        }
         changerAnimation();
 
     }
@@ -60,17 +55,9 @@ private void changerAnimation() {
         } else if (tempsAnimation == 30) {
             image = listeAnimation.get(3);
         } else if (tempsAnimation == 40) {
-            image = listeAnimation.get(4);
-        } else if (tempsAnimation == 50) {
-            image = listeAnimation.get(5);
-        } else if (tempsAnimation == 60) {
-            image = listeAnimation.get(6);
-        } else if (tempsAnimation == 70) {
-            image = listeAnimation.get(7);
-        } else if (tempsAnimation == 80) {
             tempsAnimation = -1;
-
-        }
+        } 
+        
         tempsAnimation++;
 
     }
