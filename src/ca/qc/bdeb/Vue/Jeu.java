@@ -12,7 +12,6 @@ import static ca.qc.bdeb.Controleur.Controleur.LARGEUR;
 import ca.qc.bdeb.Modele.Modele;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static java.lang.Math.random;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -41,12 +40,13 @@ public class Jeu extends BasicGame implements Observer {
     private ArrayList<KeyCode> listeKeys = new ArrayList<>(); // Les touches enfoncées
     private Input input; // L’entrée (souris/touches de clavier, etc.)
     private SpriteSheet spriteSheetTiles, spriteSheetDivers,
-            spriteSheetCoeur, spriteSheetMonde, spriteSheetPrincesse;
+            spriteSheetCoeur, spriteSheetMonde, spriteSheetPrincesse,
+            spriteSheetBonus;
 
     public static final float buffer = 50;
     private Princess princesse;
     private boolean isFinDePartie = false;
-    private int vies, points, decallage, intervaleHauteur;
+    private int vies, points, decallage, intervaleHauteur, indexBackGround;
     private Random random = new Random();
 
     /**
@@ -73,6 +73,7 @@ public class Jeu extends BasicGame implements Observer {
         spriteSheetTiles = new SpriteSheet("images/tiles.png", 32, 32);
         spriteSheetPrincesse = new SpriteSheet("images/sprites_princess.png", 32, 64);
         spriteSheetCoeur = new SpriteSheet("/images/coeur.png", 32, 32);
+        spriteSheetBonus = new SpriteSheet("images/sprites_divers.png", 32, 32);
 
         vies = modele.getHealthPoints();
         waveTimer.start();
@@ -81,6 +82,8 @@ public class Jeu extends BasicGame implements Observer {
         initCiel();
         initPlancher();
         initPrincesse();
+
+        indexBackGround = listeEntite.size();
 
         intervaleHauteur = (int) (HAUTEUR - HAUTEUR_SOL - princesse.getHeight());
 
@@ -310,14 +313,37 @@ public class Jeu extends BasicGame implements Observer {
             }
         }
 
-//        if (!listeTemp.isEmpty()) {
-//            int r = random.nextInt(10);
-//            if (r == 1) {
-//                spondBonus(listeTemp.get(0).getRectangle().getX(), listeTemp.get(0).getRectangle().getY());
-//            }
-//        }
+        if (!listeTemp.isEmpty()) {
+            //int r = random.nextInt(10);
+            int r=1;
+            if (r == 1) {
+                spondBonus(listeTemp.get(0).getRectangle().getX(), listeTemp.get(0).getRectangle().getY());
+            }
+        }
         listeEntite.removeAll(listeTemp);
         listeBougeable.removeAll(listeTemp);
+    }
+
+    private void spondBonus(float x, float y) throws SlickException {
+        // int choixBonus = random.nextInt(3);
+        int choixBonus = 0;
+
+        Bonus bonus = null;
+        switch (choixBonus) {
+            case 0:
+                bonus = new BoostEnergie(x, y, spriteSheetBonus);
+                break;
+            case 1:
+                //  bonus = new BombeMega(x, y, spriteSheetBonus);
+
+                break;
+            case 2:
+                //  bonus = new ArmeABalles(x, y, spriteSheetBonus);
+                break;
+            //  default:
+        }
+        listeEntite.add(indexBackGround, bonus);
+        listeBougeable.add((Bougeable) bonus);
     }
 
     private void gererCollisionJoueurEnnemi() {
@@ -355,7 +381,6 @@ public class Jeu extends BasicGame implements Observer {
 
         if (!listeTemp.isEmpty()) {
             activerPouvoirBonus(bonus);
-
         }
 
         listeBougeable.removeAll(listeTemp);
@@ -384,19 +409,16 @@ public class Jeu extends BasicGame implements Observer {
 //                    listeTemp.add((Entite) bougeable);
 //                }
 //            }
-//            Pow pow = new Pow(LONGUEUR / 2, HAUTEUR / 2, spriteSheetMonde);
-//            listeEntite.add(pow);
-//            listeBougeable.add(pow);
-//
+
 //            int nbEnnemisTues = listeTemp.size();
 //            controleur.ramasseBombeMega(nbEnnemisTues);
 //
 //            listeEntite.removeAll(listeTemp);
 //            listeBougeable.removeAll(listeTemp);
 //        }
-//        if (bonus instanceof BoostEnergie) {
-//            controleur.ramasseBoostEnergie();
-//        }
+        if (bonus instanceof BoostEnergie) {
+            controleur.ramasseBoostEnergie();
+        }
 //        if (bonus instanceof ArmeABalles) {
 //            tempsBonusTriple = System.currentTimeMillis();
 //
@@ -405,8 +427,8 @@ public class Jeu extends BasicGame implements Observer {
     }
 
     private void declencherWaveEnnemis() throws SlickException {
-        // int choixTypeEnnemi = random.nextInt(7);
-        int choixTypeEnnemi = 1;
+         int choixTypeEnnemi = random.nextInt(2);
+        //int choixTypeEnnemi = 1;
 
         switch (choixTypeEnnemi) {
             case 0:

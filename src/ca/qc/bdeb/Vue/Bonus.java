@@ -14,7 +14,7 @@ import org.newdawn.slick.SpriteSheet;
  */
 public abstract class Bonus extends Entite implements Bougeable,Collisionable{
     
-    protected float deltaX=1.6f,  deltaY;
+    protected float deltaX=1.2f,  deltaY;
     
     /**
      * @param x position en x
