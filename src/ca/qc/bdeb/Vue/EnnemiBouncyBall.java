@@ -5,7 +5,9 @@
  */
 package ca.qc.bdeb.Vue;
 
+import ca.qc.bdeb.Controleur.Controleur;
 import java.util.ArrayList;
+import java.util.Random;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
@@ -13,23 +15,26 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author 1749637
  */
-public class EnnemiFlappyBird extends Ennemi {
+public class EnnemiBouncyBall extends Ennemi {
 
     private int tempsAnimation = 0;
     private int posImage = 0;
     private ArrayList<Image> listeAnimation = new ArrayList<>();
+    private Random random = new Random();
+    private static float gravite = 0.5f;
+    private float speedY = 0;
 
     /**
      * @param x position en x
      * @param y position en y
      * @param spriteSheet spriteSheet ou se trouve son image
      */
-    public EnnemiFlappyBird(float x, float y, SpriteSheet spriteSheet) {
+    public EnnemiBouncyBall(float x, float y, SpriteSheet spriteSheet) {
         super(x, y, spriteSheet, 2, 2);
-        listeAnimation.add(spriteSheet.getSubImage(2, 2));
-        listeAnimation.add(spriteSheet.getSubImage(3, 2));
-        deltaX = 2.5f;
-        deltaY = 0.4f;
+        listeAnimation.add(spriteSheet.getSubImage(4,3));
+        listeAnimation.add(spriteSheet.getSubImage(3,3));
+        deltaX = 4f;
+        deltaY = 15f;
     }
 
     @Override
@@ -39,6 +44,13 @@ public class EnnemiFlappyBird extends Ennemi {
     public void bouger() {
         super.bouger(); //To change body of generated methods, choose Tools | Templates.
         x -= deltaX;
+        speedY+=gravite;
+        y+= speedY;
+        if(y+height>Controleur.HAUTEUR-Controleur.HAUTEUR_SOL){
+            y=Controleur.HAUTEUR-Controleur.HAUTEUR_SOL-height;
+            speedY*=-1;
+        }
+
         changerAnimation();
 
     }
@@ -54,5 +66,7 @@ public class EnnemiFlappyBird extends Ennemi {
         tempsAnimation++;
 
     }
+
+    
 
 }

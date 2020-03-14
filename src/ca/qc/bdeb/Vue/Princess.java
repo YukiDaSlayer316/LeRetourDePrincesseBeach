@@ -21,7 +21,7 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Princess extends Entite {
 
-    private float deltaX = 3.4f, deltaY = 3.4f, hover = 0.0f;
+    private float deltaX = 4f, deltaY = 4f, hover = 0.0f;
     private ArrayList<Image> listeAnimationVol = new ArrayList<>();
     private ArrayList<Image> listeAnimationSol = new ArrayList<>();
     private double gravity = 5.34;

@@ -47,7 +47,7 @@ public class Jeu extends BasicGame implements Observer {
     private Princess princesse;
     private boolean isFinDePartie = false;
     private int vies, points, decallage, intervaleHauteur, indexBackGround;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     /**
      * Contructeur de Jeu
@@ -430,7 +430,7 @@ public class Jeu extends BasicGame implements Observer {
 
     private void declencherWaveEnnemis() throws SlickException {
 //         int choixTypeEnnemi = random.nextInt(3);
-        int choixTypeEnnemi = 0;
+        int choixTypeEnnemi = 2;
 
         switch (choixTypeEnnemi) {
             case 0:
@@ -501,10 +501,10 @@ public class Jeu extends BasicGame implements Observer {
     private void creerEnnemiFlappyBird() {
          int posY = random.nextInt(HAUTEUR / 16) + 20;
         for (int i = 0; i < getNumberEnnemisSpawned(); i++) {
-            EnnemiFlappyBird ennemiAerien = new EnnemiFlappyBird(LARGEUR + buffer,
+            EnnemiBouncyBall ennemi = new EnnemiBouncyBall(LARGEUR + buffer,
                     posY + i * 32, spriteSheetDivers);
-            listeEntite.add(ennemiAerien);
-            listeBougeable.add(ennemiAerien);
+            listeEntite.add(ennemi);
+            listeBougeable.add(ennemi);
             posY += 30;
         }
 
