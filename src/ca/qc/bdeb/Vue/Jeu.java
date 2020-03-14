@@ -41,7 +41,7 @@ public class Jeu extends BasicGame implements Observer {
     private Input input; // L’entrée (souris/touches de clavier, etc.)
     private SpriteSheet spriteSheetTiles, spriteSheetDivers,
             spriteSheetCoeur, spriteSheetMonde, spriteSheetPrincesse,
-            spriteSheetBonus;
+            spriteSheetBonus, spriteSheetMoreTiles,spriteSheetMoreItems;
 
     public static final float buffer = 50;
     private Princess princesse;
@@ -74,6 +74,8 @@ public class Jeu extends BasicGame implements Observer {
         spriteSheetPrincesse = new SpriteSheet("images/sprites_princess.png", 32, 64);
         spriteSheetCoeur = new SpriteSheet("/images/coeur.png", 32, 32);
         spriteSheetBonus = new SpriteSheet("images/sprites_divers.png", 32, 32);
+//        spriteSheetMoreItems = new SpriteSheet("images/sprites_more_items.png", 32, 32);
+//        spriteSheetTiles = new SpriteSheet("images/spritesheet_more_tiles.png", 32, 32);
 
         vies = modele.getHealthPoints();
         waveTimer.start();
@@ -232,7 +234,7 @@ public class Jeu extends BasicGame implements Observer {
 //        if (tempsBonusTriple + 10000 < System.currentTimeMillis()) {
 //            return false;
 //        }
-        return true;
+        return false;
     }
 
     private void tirerBalle() throws SlickException {
@@ -427,8 +429,8 @@ public class Jeu extends BasicGame implements Observer {
     }
 
     private void declencherWaveEnnemis() throws SlickException {
-         int choixTypeEnnemi = random.nextInt(2);
-        //int choixTypeEnnemi = 1;
+//         int choixTypeEnnemi = random.nextInt(3);
+        int choixTypeEnnemi = 0;
 
         switch (choixTypeEnnemi) {
             case 0:
@@ -436,6 +438,8 @@ public class Jeu extends BasicGame implements Observer {
                 break;
             case 1:
                 creerEnnemiRocket();
+            case 2:
+                creerEnnemiFlappyBird();
             default:
 
         }
@@ -451,12 +455,15 @@ public class Jeu extends BasicGame implements Observer {
     }
 
     private void creerEnnemisBulles() {
+       int sep = random.nextInt(20);
+        
         for (int i = 0; i < getNumberEnnemisSpawned(); i++) {
-            EnnemiBulle ennemiBulle = new EnnemiBulle(LARGEUR,
-                    decallage - buffer + i * 16, spriteSheetDivers);
+            EnnemiBulle ennemiBulle = new EnnemiBulle(LARGEUR + i * 25,
+                    HAUTEUR-HAUTEUR_SOL-32-sep, spriteSheetDivers);
             listeEntite.add(ennemiBulle);
             listeBougeable.add(ennemiBulle);
         }
+        
     }
 
     private void creerEnnemiRocket() {
@@ -488,6 +495,20 @@ public class Jeu extends BasicGame implements Observer {
                 listeTemp.add((Entite) bougeable);
             }
         }
+
+    }
+
+    private void creerEnnemiFlappyBird() {
+         int posY = random.nextInt(HAUTEUR / 16) + 20;
+        for (int i = 0; i < getNumberEnnemisSpawned(); i++) {
+            EnnemiFlappyBird ennemiAerien = new EnnemiFlappyBird(LARGEUR + buffer,
+                    posY + i * 32, spriteSheetDivers);
+            listeEntite.add(ennemiAerien);
+            listeBougeable.add(ennemiAerien);
+            posY += 30;
+        }
+
+
 
     }
 
