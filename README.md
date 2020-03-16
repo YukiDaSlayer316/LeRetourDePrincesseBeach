@@ -27,8 +27,8 @@ Si la librairie est déjà installée sur votre ordinateur, allez à l'étape 6.
 
 4. Nommer la librairie «Slick2D» et appuyer sur OK
 
-![Screenshot](screenshots/tutorial_2.png)
 
+![Screenshot](screenshots/tutorial_5.png)
 
 ![Screenshot](screenshots/tutorial_3.png)
 
@@ -39,9 +39,9 @@ Si la librairie est déjà installée sur votre ordinateur, allez à l'étape 6.
 6. Ajouter la librairie sur le projet : Dans votre projet, clique droit sur l'onglet «Librairies» > 
 Add library. Choisir la librairie «Slick2D» et appuyer sur Add library pour l'ajouter. Vous devriez voir les 4 librairies ajoutées.
 
-![Screenshot](screenshots/tutorial_5.png)
 ![Screenshot](screenshots/tutorial_6.png)
 ![Screenshot](screenshots/tutorial_7.png)
+![Screenshot](screenshots/tutorial_8.png)
 
 # Construction du jeu
 
