@@ -20,15 +20,28 @@ SPACE : Attaquer
 Si la librairie est déjà installée sur votre ordinateur, allez à l'étape 6.
 
 1. Télécharger le fichier «slick2Dlib.zip» : http://slick.ninjacave.com/wiki/index.php?title=Setting_up_Slick2D_with_NetBeansIDE
-
-  ![Screenshot](screenshots/tutorial_1.png)
-
 2. Décompresser le fichier et noter le chemin du dossier.
 3. Importer la librairie dans Netbeans : Sur la barre du menu, aller sur Tools > Librairies > New Library
+
+![Screenshot](screenshots/tutorial_1.png)
+
 4. Nommer la librairie «Slick2D» et appuyer sur OK
+
+![Screenshot](screenshots/tutorial_2.png)
+
+
+![Screenshot](screenshots/tutorial_3.png)
+
 5. Appuyer sur «Add JAR/Folder» pour ajouter les fichiers «jinput.jar», «lwlgl.jar», «lwlgl_util.jar», «slick.jar»
+
+![Screenshot](screenshots/tutorial_4.png)
+
 6. Ajouter la librairie sur le projet : Dans votre projet, clique droit sur l'onglet «Librairies» > 
-Add library et choisir la librairie «Slick2D» pour l'ajouter. Vous devriz voir les 4 librairies ajoutées.
+Add library. Choisir la librairie «Slick2D» et appuyer sur Add library pour l'ajouter. Vous devriez voir les 4 librairies ajoutées.
+
+![Screenshot](screenshots/tutorial_5.png)
+![Screenshot](screenshots/tutorial_6.png)
+![Screenshot](screenshots/tutorial_7.png)
 
 # Construction du jeu
 
