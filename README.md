@@ -4,6 +4,9 @@ Le Retour de Princesse Beach est un jeu de survie inspiré par Space Invaders et
 Le but du jeu est simple: on incarne la Princesse Beach 
 et on doit éliminer le plus d'ennemis possible afin accumuler des points sans mourir.
 
+![Screenshot](screenshots/jeu.png)
+
+
 Le jeu est construit sur Java à partir de la librairie "slick2D" et à partir de spritesheet pris sur Internet.
 Liens pour les Spritesheets:
 
