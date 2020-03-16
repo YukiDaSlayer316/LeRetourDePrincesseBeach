@@ -61,7 +61,7 @@ Il existe plusieurs types d'ennemis:
 - S Shape: Se déplacent en fonction sinusoidale. L'amplitude change
 - Follow: se déplace toujours vers le joueur
 - Rocket: Se déplace très rapidement en ligne droite
-- Grenouille: Fait des bonds au sol de manière imprévisible
+- Bouncy Ball: Fait des bonds au sol de manière imprévisible
 - Angry Cloud: Un koopa sur un nuage lâche des objets. Le nuage fait plusieurs aller-retours avant de partir
 - Angry Plant: Une plante se déplace au solet crache des boules de feu vers le ciel
 - Bulles: Si Beach touche la bulle, celle-ci éclate et lui fait perdre une vie
