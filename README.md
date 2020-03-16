@@ -21,7 +21,7 @@ Si la librairie est déjà installée sur votre ordinateur, allez à l'étape 6.
 
 1. Télécharger le fichier «slick2Dlib.zip» : http://slick.ninjacave.com/wiki/index.php?title=Setting_up_Slick2D_with_NetBeansIDE
 
-![Screenshot] (screenshots/tutorial_1.png) 
+  ![Screenshot](screenshots/tutorial_1.png)
 
 2. Décompresser le fichier et noter le chemin du dossier.
 3. Importer la librairie dans Netbeans : Sur la barre du menu, aller sur Tools > Librairies > New Library
