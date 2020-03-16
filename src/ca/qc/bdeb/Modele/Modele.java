@@ -5,6 +5,9 @@
  */
 package ca.qc.bdeb.Modele;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 import java.util.Observable;
 import java.util.Random;
 
@@ -76,5 +79,21 @@ public class Modele extends Observable {
     public void majObservers() {
         setChanged();
         notifyObservers();
+    }
+    
+       public float[][] getPositionRoue() {
+        int rayon = 100;
+        float angle = 0;
+        float[][] positionRoue = new float[3][8];
+
+        for (int i = 0; i < 8; i++) {
+            positionRoue[0][i] = (float) cos(angle) * rayon;
+            positionRoue[1][i] = (float) sin(angle) * rayon;
+            positionRoue[2][i] = angle;
+            angle += PI / 4;
+        }
+
+        return positionRoue;
+
     }
 }

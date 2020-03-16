@@ -6,7 +6,6 @@
 package ca.qc.bdeb.Vue;
 
 import java.util.ArrayList;
-import java.util.Random;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
@@ -14,33 +13,32 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author 1749637
  */
-public class EnnemiRocket extends Ennemi {
+public class EnnemiFlappyBird extends Ennemi {
 
+    private int tempsAnimation = 0;
+    private int posImage = 0;
     private ArrayList<Image> listeAnimation = new ArrayList<>();
-    private float deltaX = 20;
-    private Random r = new Random();
 
     /**
      * @param x position en x
      * @param y position en y
      * @param spriteSheet spriteSheet ou se trouve son image
      */
-    public EnnemiRocket(float x, float y, SpriteSheet spriteSheet) {
-        super(x, y, spriteSheet, 0, 0);
-        listeAnimation.add(spriteSheet.getSubImage(5, 3));
-        listeAnimation.add(spriteSheet.getSubImage(6, 3));
-//        listeAnimation.add(spriteSheet.getSubImage(5, 1));
-//        listeAnimation.add(spriteSheet.getSubImage(6, 1));
-//        deltaY = (float) r.nextDouble();
+    public EnnemiFlappyBird(float x, float y, SpriteSheet spriteSheet) {
+        super(x, y, spriteSheet, 2, 2);
+        listeAnimation.add(spriteSheet.getSubImage(2, 2));
+        listeAnimation.add(spriteSheet.getSubImage(3, 2));
+        deltaX = 2.5f;
+        deltaY = 0.4f;
     }
 
     @Override
+    /**
+     * anime et fait bouger l'objet
+     */
     public void bouger() {
-        super.bouger();
+        super.bouger(); //To change body of generated methods, choose Tools | Templates.
         x -= deltaX;
-//        if (y + width < 0) {
-//            setDetruire(true);
-//        }
         changerAnimation();
 
     }
@@ -48,12 +46,11 @@ public class EnnemiRocket extends Ennemi {
     private void changerAnimation() {
         if (tempsAnimation == 0) {
             image = listeAnimation.get(0);
-        } else if (tempsAnimation == 10) {
+        } else if (tempsAnimation == 5) {
             image = listeAnimation.get(1);
-        } else {
+        } else if (tempsAnimation == 10) {
             tempsAnimation = -1;
         }
-
         tempsAnimation++;
 
     }
