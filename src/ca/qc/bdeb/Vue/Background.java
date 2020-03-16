@@ -11,16 +11,14 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author emuli
  */
-public class Ciel extends Background{
+public abstract class Background extends Entite implements Bougeable {
 
-    @Override
-    public void bouger() {
-    }
-     public Ciel(float x, float y, SpriteSheet spriteSheet) {
-        super(x, y, spriteSheet,6 , 12);
+    public Background(float x, float y, SpriteSheet spriteSheet, int ligne, int colonne) {
+        super(x, y, spriteSheet, ligne, colonne);
     }
 
-    @Override
-    public void isMoving() {
+    public void isNotMoving() {
+        deltaX = 0;
     }
+    public abstract void isMoving();
 }

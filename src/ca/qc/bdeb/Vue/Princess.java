@@ -8,6 +8,8 @@ package ca.qc.bdeb.Vue;
 import static ca.qc.bdeb.Controleur.Controleur.HAUTEUR;
 import static ca.qc.bdeb.Controleur.Controleur.HAUTEUR_SOL;
 import static ca.qc.bdeb.Controleur.Controleur.LARGEUR;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 import java.util.ArrayList;
 import javafx.scene.input.KeyCode;
 import org.newdawn.slick.Image;
@@ -17,29 +19,39 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author emuli
  */
-public class Princess extends Entite{
-    
-     private float deltaX = 1.6f, deltaY = 1.6f;
-    private ArrayList<Image> listeAnimationVol = new ArrayList<>();
-        private ArrayList<Image> listeAnimationSol = new ArrayList<>();
+public class Princess extends Entite {
 
-    private int animation = 0, posImage=0;
-    private boolean enVol=false;
+    private float deltaX = 4f, deltaY = 4f, hover = 0.0f;
+    private ArrayList<Image> listeAnimationVol = new ArrayList<>();
+    private ArrayList<Image> listeAnimationSol = new ArrayList<>();
+    private double gravity = 5.34;
+
+    private int animation = 0, posImage = 0;
+    private boolean enVol = false;
+
+    private long tempsAttaque = 0;
+
     public Princess(float x, float y, SpriteSheet spriteSheet) {
         super(x, y, spriteSheet, 0, 2);
         listeAnimationVol.add(spriteSheet.getSubImage(0, 0));
-
         listeAnimationVol.add(spriteSheet.getSubImage(1, 0));
-// Image #2 de l'animation - position 0,1
         listeAnimationVol.add(spriteSheet.getSubImage(2, 0));
-// Image #3 de l'animation - position 0,2
         listeAnimationSol.add(spriteSheet.getSubImage(3, 0));
         listeAnimationSol.add(spriteSheet.getSubImage(4, 0));
         listeAnimationSol.add(spriteSheet.getSubImage(5, 0));
 
     }
-    
-     void bouger(ArrayList<KeyCode> listeKeys) {
+
+    protected boolean peutAttaquer() {
+
+        if (System.currentTimeMillis() - tempsAttaque >= 500) {
+            tempsAttaque = System.currentTimeMillis();
+            return true;
+        }
+        return false;
+    }
+
+    void bouger(ArrayList<KeyCode> listeKeys) {
         if (listeKeys.contains(KeyCode.RIGHT)) {
             if (x + deltaX + width < LARGEUR) {
                 x = x + deltaX;
@@ -58,56 +70,53 @@ public class Princess extends Entite{
 
         }
         if (listeKeys.contains(KeyCode.DOWN)) {
-            if (y + deltaY  < HAUTEUR - HAUTEUR_SOL-height) {
+            if (y + deltaY < HAUTEUR - HAUTEUR_SOL - height) {
                 y = y + deltaY;  //x = x - deltaX;
             }
 
         }
-        
-      //  enVol=estEnVol();
-        
-     
+
+        if (estEnVol()) {
+            y = (float) (y + cos(hover) * 0.15 + gravity * 0.2);
+        }
 
         changerImage();
 
     }
 
     private void changerImage() {
-        
+
         if (animation == 0) {
-            
-            posImage=0;
+            posImage = 0;
         } else if (animation == 50) {
-           // this.image = listeAnimation.get(1);
-                       posImage=1;
-
+            posImage = 1;
         } else if (animation == 100) {
-           // this.image = listeAnimation.get(2);
-                       posImage=2;
-
-        } 
-        else if (animation == 150) {
-            animation = -1; 
+            posImage = 2;
+        } else if (animation == 150) {
+            animation = -1;
         }
-        
-        
-        if(enVol){
-                        this.image = listeAnimationVol.get(posImage);
 
-        }else{
-                                    this.image = listeAnimationSol.get(posImage);
-
+        if (estEnVol()) {
+            this.image = listeAnimationVol.get(posImage);
+        } else {
+            this.image = listeAnimationSol.get(posImage);
         }
         animation++;
 
     }
 
-   /* private boolean estEnVol() {
-          if(y+height==HAUTEUR-HAUTEUR_SOL){
-            return false;
-        }
+    private boolean estEnVol() {
+        if (y + height < HAUTEUR - HAUTEUR_SOL) {
             return true;
-        
-    }*/
+        }
+        return false;
+
+    }
+
+    protected void falling() {
+        if (y+height<HAUTEUR-HAUTEUR_SOL) {
+            y=(float) (y+gravity);
+        }
+    }
 
 }

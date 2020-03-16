@@ -84,4 +84,9 @@ protected float deltaX=1.2f,deltaY=1.2f;
     public void setX(float x) {
         this.x = x;
     }
+
+    public void setDetruire(boolean detruire) {
+        this.detruire = detruire;
+    }
+    
 }

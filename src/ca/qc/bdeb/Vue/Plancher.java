@@ -11,14 +11,23 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author emuli
  */
-public class Plancher extends Entite implements Bougeable{
-    private float deltaX=0.6f;
+public class Plancher extends Background {
+
+    public static float VITESSE_PLANCHER = 0.6f;
+    private float deltaX = VITESSE_PLANCHER;
+
     public Plancher(float x, float y, SpriteSheet spriteSheet) {
         super(x, y, spriteSheet, 0, 0);
     }
 
     @Override
     public void bouger() {
-        x-=deltaX;
+        x -= deltaX;
     }
+
+    @Override
+    public void isMoving() {
+        deltaX = VITESSE_PLANCHER;
+    }
+
 }
