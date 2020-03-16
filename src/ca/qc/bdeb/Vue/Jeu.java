@@ -74,8 +74,8 @@ public class Jeu extends BasicGame implements Observer {
         spriteSheetPrincesse = new SpriteSheet("images/sprites_princess.png", 32, 64);
         spriteSheetCoeur = new SpriteSheet("/images/coeur.png", 32, 32);
         spriteSheetBonus = new SpriteSheet("images/sprites_divers.png", 32, 32);
-//        spriteSheetMoreItems = new SpriteSheet("images/sprites_more_items.png", 32, 32);
-//        spriteSheetTiles = new SpriteSheet("images/spritesheet_more_tiles.png", 32, 32);
+        spriteSheetMoreItems = new SpriteSheet("/images/sprites_more_items.jpg", 58, 58);
+        spriteSheetMoreTiles = new SpriteSheet("images/spritesheet_more_tiles.png", 16, 16);
 
         vies = modele.getHealthPoints();
         waveTimer.start();
@@ -336,13 +336,18 @@ public class Jeu extends BasicGame implements Observer {
                 bonus = new BoostEnergie(x, y, spriteSheetBonus);
                 break;
             case 1:
+//                bonus = new BonusFleur(x, y, spriteSheetMoreItems);
+//                bonus = new BonusFleur(x, y, spriteSheetMoreTiles);
+                
+                
+                
                 //  bonus = new BombeMega(x, y, spriteSheetBonus);
 
                 break;
             case 2:
                 //  bonus = new ArmeABalles(x, y, spriteSheetBonus);
                 break;
-            //  default:
+              default:
         }
         listeEntite.add(indexBackGround, bonus);
         listeBougeable.add((Bougeable) bonus);
@@ -430,7 +435,7 @@ public class Jeu extends BasicGame implements Observer {
 
     private void declencherWaveEnnemis() throws SlickException {
 //         int choixTypeEnnemi = random.nextInt(3);
-        int choixTypeEnnemi = 2;
+        int choixTypeEnnemi = 1;
 
         switch (choixTypeEnnemi) {
             case 0:
@@ -438,8 +443,19 @@ public class Jeu extends BasicGame implements Observer {
                 break;
             case 1:
                 creerEnnemiRocket();
+                break;
             case 2:
+                creerEnnemiBouncyBall();
+                break;
+                
+            case 3:
                 creerEnnemiFlappyBird();
+                break;
+            case 4:
+                creerEnnemiSShape();
+                break;
+            case 5:
+                creerEnnemiWheel();
             default:
 
         }
@@ -498,7 +514,7 @@ public class Jeu extends BasicGame implements Observer {
 
     }
 
-    private void creerEnnemiFlappyBird() {
+    private void creerEnnemiBouncyBall() {
          int posY = random.nextInt(HAUTEUR / 16) + 20;
         for (int i = 0; i < getNumberEnnemisSpawned(); i++) {
             EnnemiBouncyBall ennemi = new EnnemiBouncyBall(LARGEUR + buffer,
@@ -510,6 +526,46 @@ public class Jeu extends BasicGame implements Observer {
 
 
 
+    }
+
+    private void creerEnnemiFlappyBird() {
+     int posY = random.nextInt(HAUTEUR / 16) + 20;
+        for (int i = 0; i < getNumberEnnemisSpawned(); i++) {
+            EnnemiFlappyBird ennemi = new EnnemiFlappyBird(LARGEUR + buffer,
+                    posY + i * 32, spriteSheetDivers);
+            listeEntite.add(ennemi);
+            listeBougeable.add(ennemi);
+            posY += 30;
+        }
+        
+        
+    }
+
+    private void creerEnnemiSShape() {
+ int posY = random.nextInt(200) + HAUTEUR/4;
+        for (int i = 0; i < getNumberEnnemisSpawned(); i++) {
+            EnnemiSShape ennemiAerienZigZag = new EnnemiSShape(LARGEUR + buffer + i * 42, posY, spriteSheetDivers);
+            listeEntite.add(ennemiAerienZigZag);
+            listeBougeable.add(ennemiAerienZigZag);
+        }
+
+    }
+
+    private void creerEnnemiWheel() {
+       int posY = random.nextInt(250) + 150;
+
+        float[][] positionRoue = modele.getPositionRoue();
+        for (int i = 0; i < positionRoue[0].length; i++) {
+
+            Ennemi ennemiAerienRoue = new EnnemiWheel(LARGEUR + buffer + positionRoue[0][i],
+                    posY - positionRoue[1][i],
+                    spriteSheetDivers, positionRoue[2][i], posY);
+
+            listeEntite.add(ennemiAerienRoue);
+            listeBougeable.add(ennemiAerienRoue);
+        }
+    
+    
     }
 
 }
