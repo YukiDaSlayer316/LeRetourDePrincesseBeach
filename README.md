@@ -89,3 +89,7 @@ Il existe plusieurs types de bonus:
 - Killer Instinct: Les boulets de Beach suivent l'ennemi le plus proche
 - Cold Blood Killer: Beach obtient 2x plus de points pour chaque ennemi éliminé
 
+# Free sprite sheets Links
+
+* Game art : https://www.gameart2d.com/freebies.html
+* itch.io: https://itch.io/games
